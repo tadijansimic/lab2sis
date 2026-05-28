@@ -1,0 +1,2 @@
+function y = rect(t)
+y = (abs(t) < 0.5) + 0.5 * (abs(t) == 0.5);

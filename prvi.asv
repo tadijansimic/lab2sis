@@ -1,0 +1,56 @@
+% Definiši vremenski vektor
+t = 0:0.01:7;
+
+% 1. Analitički impulsni odziv
+h_analiticki = (exp(-2*t) - exp(-3*t));
+
+% 2. Impulsni odziv preko Control System Toolbox-a (impulse)
+s = tf('s');
+sys = 1 / (s^2 + 5*s + 6);
+[h_matlab, t_matlab] = impulse(sys, t);
+
+% 3. Crtanje na istom grafiku
+figure;
+plot(t, h_analiticki, 'b', 'LineWidth', 2); % Plava linija za analitički
+hold on;                                    % "Zadrži" grafik da dodamo još linija
+plot(t_matlab, h_matlab, 'r--', 'LineWidth', 2); % Crvena isprekidana za MATLAB
+hold off;
+
+% Dodavanje oznaka radi preglednosti
+grid on;
+title('Poređenje analitičkog i MATLAB impulsnog odziva');
+xlabel('t [s]');
+ylabel('h(t)');
+legend('Analitički (ručna formula)', 'MATLAB (impulse komanda)');
+
+
+% Definiši vremenski vektor
+t = 0:0.01:7;
+
+% Izračunaj analitički odziv koji smo dobili preko Furijeove transformacije
+% Definiši vreme
+t = 0:0.01:7;
+
+% 1. Analitički odziv (onaj koji smo izračunali)
+y_analiticki = (1/6 - 0.5*exp(-2*t) + (1/3)*exp(-3*t));
+
+% 2. Odziv preko lsim (zahteva Control System Toolbox)
+s = tf('s');
+sys = 1 / (s^2 + 5*s + 6);
+x = ones(size(t)); % Pobuda u(t)
+[y_lsim, t_lsim] = lsim(sys, x, t);
+
+% 3. Crtanje oba na istom grafiku
+figure;
+plot(t, y_analiticki, 'b', 'LineWidth', 3); % Plava deblja linija za analitički
+hold on;
+plot(t_lsim, y_lsim, 'r--', 'LineWidth', 1.5); % Crvena isprekidana za lsim
+yline(1/6, '--k', 'Ustaljeno stanje 1/6'); % Crna linija za ustaljeno stanje
+
+% Ulepšavanje grafikona
+grid on;
+title('Poređenje: Analitički odziv vs lsim simulacija');
+xlabel('t [s]');
+ylabel('y(t)');
+legend('Analitički (ručna formula)', 'lsim komanda', 'Ustaljeno stanje');
+hold off;
